@@ -1,0 +1,47 @@
+frontend/
+├── app/
+│   └── page.tsx
+├── node_modules/
+├── public/
+├── src/
+│   ├── assets/
+│   │   └── react.svg
+│   ├── components/
+│   │   ├── Dashboard.jsx
+│   │   ├── Login.jsx
+│   │   ├── NoteCard.jsx
+│   │   └── NoteModal.jsx
+│   ├── App.css
+│   ├── App.jsx
+│   ├── index.css
+│   └── main.jsx
+├── .env
+├── .gitignore
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── README.md
+└── vite.config.js
+
+backend/
+├── controllers/
+│   └── authController.js
+├── middleware/
+│   └── authMiddleware.js
+├── models/
+│   ├── Note.js
+│   └── User.js
+├── node_modules/
+├── routes/
+│   ├── authRoutes.js
+│   └── noteRoutes.js
+├── utils/
+│   ├── emailService.js
+│   └── utils.js
+├── mailer.js
+├── .env
+├── index.js
+├── otpStore.js
+├── package-lock.json
+└── package.json
