@@ -52,6 +52,7 @@ import Dashboard from "./components/Dashboard";
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -71,9 +72,10 @@ function App() {
     }
   }, []);
 
-  const handleLogin = (userData) => {
+  const handleLogin = (userData, token) => {
     setIsAuthenticated(true);
     setUser(userData);
+     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(userData));
   };
 

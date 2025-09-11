@@ -51,8 +51,8 @@ const Login = ({ onLogin }) => {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("token", data.token);
-        onLogin(data.user); // This will redirect or store the user
+       // localStorage.setItem("token", data.token);
+        onLogin(data.user , data.token); // This will redirect or store the user
       } else {
         alert("Invalid OTP");
       }
