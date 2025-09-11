@@ -4,7 +4,7 @@ const { sendOTPEmail } = require("../utils/emailService.js"); // adjust path if 
 const express = require("express");
 const router = express.Router();
 const OTP = require("../otpStore");
-const User = require("../models/user");
+const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 // SEND OTP
