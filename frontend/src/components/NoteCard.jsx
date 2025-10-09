@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 
-const NoteCard = ({ note, onEdit, onDelete,onView, theme }) => {
+const NoteCard = ({ note, onEdit, onDelete, onView, theme }) => {
   const formatDate = (dateString) => {
     const date = new Date(dateString)
     return date.toLocaleDateString("en-US", {
