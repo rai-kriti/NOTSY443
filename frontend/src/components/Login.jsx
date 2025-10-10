@@ -9,7 +9,7 @@ const Login = ({ onLogin }) => {
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const API = import.meta.env.VITE_API_BASE_URL || "https://notsy443.onrender.com";
+  const API = import.meta.env.VITE_API_BASE_URL ;
 
   const handleSendOtp = async (e) => {
     e.preventDefault();

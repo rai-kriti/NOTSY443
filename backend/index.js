@@ -6,10 +6,11 @@ require('dotenv').config();
 const app = express();
 app.use(cors({
   origin: [
-    "https://myai-project-kt3e.vercel.app", // your Vercel frontend
+    "https://myai-project-kt3e-git-main-raikriti628-gmailcoms-projects.vercel.app/", // your Vercel frontend
                     // local dev
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
+   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 }));
 
