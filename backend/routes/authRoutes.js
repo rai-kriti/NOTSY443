@@ -1,6 +1,4 @@
-
-const { sendOTPEmail } = require("../utils/emailService.js"); // adjust path if needed
-
+const { sendOTPEmail } = require("../utils/emailService.js");
 const express = require("express");
 const router = express.Router();
 const OTP = require("../otpStore");
@@ -15,9 +13,8 @@ router.post("/send-otp", async (req, res) => {
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
     await OTP.create({ email, otp: otpCode });
 
-   // console.log("OTP sent:", otpCode);  🔐 Replace with email service in prod
+    // Send OTP via Resend
     await sendOTPEmail(email, otpCode);
-
 
     res.json({ message: "OTP sent successfully" });
   } catch (err) {
@@ -38,7 +35,7 @@ router.post("/verify-otp", async (req, res) => {
     }
 
     const now = new Date();
-    const otpAge = (now - validOtp.createdAt) / (1000 * 60);
+    const otpAge = (now - validOtp.createdAt) / (1000 * 60); // in minutes
 
     if (otpAge > 10) {
       await OTP.deleteMany({ email });
@@ -49,7 +46,6 @@ router.post("/verify-otp", async (req, res) => {
       return res.status(400).json({ message: "Invalid OTP" });
     }
 
-    // ✅ Register user if not exist
     let user = await User.findOne({ email });
 
     if (!user) {
@@ -63,7 +59,7 @@ router.post("/verify-otp", async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.json({ message: "Login successful", token , user });
+    res.json({ message: "Login successful", token, user });
   } catch (err) {
     console.error("OTP verify error:", err.message);
     res.status(500).json({ message: "Server error" });
