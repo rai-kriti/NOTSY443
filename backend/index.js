@@ -4,17 +4,15 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-app.use(
-  cors({
-    origin: [
-      "https://notsy.vercel.app", // your frontend URL
-      "http://localhost:5173",    // for local testing (optional)
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: [
+    "https://myai-project-kt3e.vercel.app", // your Vercel frontend
+    "http://localhost:5173",                // local dev
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+}));
+
 
 app.use(express.json());
 
