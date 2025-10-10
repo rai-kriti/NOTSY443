@@ -7,7 +7,7 @@ const app = express();
 app.use(cors({
   origin: [
     "https://myai-project-kt3e.vercel.app", // your Vercel frontend
-    "http://localhost:5173",                // local dev
+                    // local dev
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
