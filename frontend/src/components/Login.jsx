@@ -9,7 +9,7 @@ const Login = ({ onLogin }) => {
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+  const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000" || "https://myai-project-kt3e.vercel.app/";
 
   const handleSendOtp = async (e) => {
     e.preventDefault();
