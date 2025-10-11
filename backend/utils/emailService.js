@@ -1,21 +1,6 @@
-// const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-const createTransporter = () => {
-  return nodemailer.createTransporter({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS // App password
-    },
-    // Add timeout settings
-    socketTimeout: 30000, // 30 seconds
-    connectionTimeout: 30000,
-    pool: true,
-    maxConnections: 1,
-    rateDelta: 1000,
-    rateLimit: 1
-  });
-};
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendOTPEmail = async (email, otp) => {
   try {
