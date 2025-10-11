@@ -11,65 +11,80 @@ const jwt = require("jsonwebtoken");
 
 
 // TEMPORARY DEBUG ENDPOINT - REMOVE IN PRODUCTION
-router.post("/send-otp-debug", async (req, res) => {
-  const { email } = req.body;
+// router.post("/send-otp-debug", async (req, res) => {
+//   const { email } = req.body;
 
-  try {
-    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+//   try {
+//     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
     
-    // Save OTP to DB
-    await OTP.create({ email, otp: otpCode });
-    console.log(`🔧 DEBUG OTP for ${email}: ${otpCode}`);
+//     // Save OTP to DB
+//     await OTP.create({ email, otp: otpCode });
+//     console.log(`🔧 DEBUG OTP for ${email}: ${otpCode}`);
 
-    res.json({ 
-      message: "OTP generated (debug mode)", 
-      otp: otpCode,
-      note: "Use this OTP to test the verify-otp endpoint while we fix email service" 
-    });
-  } catch (err) {
-    console.error("Debug OTP error:", err);
-    res.status(500).json({ error: err.message });
-  }
-});
+//     res.json({ 
+//       message: "OTP generated (debug mode)", 
+//       otp: otpCode,
+//       note: "Use this OTP to test the verify-otp endpoint while we fix email service" 
+//     });
+//   } catch (err) {
+//     console.error("Debug OTP error:", err);
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 
 
 
 
 
 // SEND OTP
+// SEND OTP - Smart version with fallback
 router.post("/send-otp", async (req, res) => {
-  console.log("📨 Send OTP endpoint hit", req.body);
   const { email } = req.body;
-
-  // Validate email
-  if (!email || !email.includes('@')) {
-    return res.status(400).json({ message: "Valid email is required" });
-  }
+  const VERIFIED_EMAIL = "kritiwork825@gmail.com"; // Your Resend verified email
 
   try {
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
-    console.log(`📧 Generating OTP for ${email}: ${otpCode}`);
-
+    
     // Save OTP to DB
-    const savedOTP = await OTP.create({ email, otp: otpCode });
-    console.log("✅ OTP saved to database:", savedOTP);
+    await OTP.create({ email, otp: otpCode });
+    console.log(`📧 OTP generated for ${email}: ${otpCode}`);
 
-    // Send OTP via Gmail
-    console.log("📤 Sending email...");
-    await sendOTPEmail(email, otpCode);
-    console.log("✅ Email sent successfully");
-
-    res.json({ message: "OTP sent successfully" });
+    // If it's the verified email, use Resend
+    if (email === VERIFIED_EMAIL) {
+      try {
+        await sendOTPEmail(email, otpCode);
+        console.log("✅ Email sent successfully via Resend");
+        res.json({ 
+          message: "OTP sent successfully to your email"
+        });
+      } catch (emailError) {
+        console.error("❌ Resend failed:", emailError.message);
+        // Even for verified email, fallback to returning OTP
+        res.json({ 
+          message: "OTP generated", 
+          otp: otpCode,
+          note: "Email service temporarily unavailable. Use this OTP.",
+          debug: true
+        });
+      }
+    } else {
+      // For other emails, return OTP in response with a friendly message
+      res.json({ 
+        message: "OTP generated successfully", 
+        otp: otpCode,
+        note: "Demo mode: OTP shown here. In production, this would be sent via email.",
+        debug: true
+      });
+    }
+    
   } catch (err) {
     console.error("❌ Send OTP error:", err);
     res.status(500).json({ 
-      message: "Error sending OTP", 
-      error: err.message,
-      details: "Check server logs for more information"
+      message: "Error generating OTP", 
+      error: err.message 
     });
   }
 });
-
 // VERIFY OTP & LOGIN/REGISTER USER
 router.post("/verify-otp", async (req, res) => {
   console.log("🔍 Verify OTP endpoint hit", req.body);
