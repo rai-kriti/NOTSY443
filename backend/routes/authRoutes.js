@@ -11,15 +11,17 @@ router.post("/send-otp", async (req, res) => {
 
   try {
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Save OTP to DB
     await OTP.create({ email, otp: otpCode });
 
-    // Send OTP via Resend
+    // Send OTP via Gmail (App Password)
     await sendOTPEmail(email, otpCode);
 
     res.json({ message: "OTP sent successfully" });
   } catch (err) {
-    console.error("Send OTP error:", err.message);
-    res.status(500).json({ message: "Server error while sending OTP" });
+    console.error("Send OTP error:", err);
+    res.status(500).json({ message: "Error sending OTP", error: err.message });
   }
 });
 
@@ -61,8 +63,8 @@ router.post("/verify-otp", async (req, res) => {
 
     res.json({ message: "Login successful", token, user });
   } catch (err) {
-    console.error("OTP verify error:", err.message);
-    res.status(500).json({ message: "Server error" });
+    console.error("OTP verify error:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 

@@ -1,47 +1,29 @@
-// // utils/emailService.js
+// utils/emailService.js
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const sendOTPEmail = async (toEmail, otpCode) => {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
 
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: toEmail,
-    subject: "Your OTP Code",
-    text: `Your OTP is: ${otpCode}. It will expire in 10 minutes.`,
-  };
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: toEmail,
+      subject: "Your OTP Code",
+      text: `Your OTP is: ${otpCode}. It will expire in 10 minutes.`,
+    };
 
-  await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
+    console.log(`✅ OTP sent successfully to ${toEmail}`);
+  } catch (error) {
+    console.error("❌ Error sending OTP:", error.message);
+  }
 };
 
 module.exports = { sendOTPEmail };
-
-
-// const { Resend } = require('resend');
-// require('dotenv').config();
-
-// const resend = new Resend(process.env.RESEND_API_KEY);
-
-// const sendOTPEmail = async (toEmail, otpCode) => {
-//   try {
-//     await resend.emails.send({
-//       from: process.env.EMAIL_FROM, // verified sender
-//       to: toEmail,
-//       subject: 'Your OTP Code',
-//       html: `<p>Your OTP is: <strong>${otpCode}</strong>. It will expire in 10 minutes.</p>`,
-//     });
-//     console.log(`OTP sent to ${toEmail}: ${otpCode}`);
-//   } catch (err) {
-//     console.error('Error sending OTP via Resend:', err.message);
-//     throw err;
-//   }
-// };
-
-// module.exports = { sendOTPEmail };
